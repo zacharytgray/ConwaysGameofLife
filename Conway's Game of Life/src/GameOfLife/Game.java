@@ -65,33 +65,37 @@ public class Game {
 //        }
 //    }
 
-    public static void calculateNextGen(CompactMatrix m, CompactMatrix nextM) { // compare twoversions of this
+    public static void calculateNextGen(CompactMatrix m, CompactMatrix nextM) { // compare two versions of this
         int size = m.getSize();
+
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
+                boolean value = m.getCell(r, c);
                 int neighbors = m.calculateNeighbors(r, c);
-                if (m.getCell(r, c) && neighbors < 2) {
-                    nextM.setCell(r, c, false);
+                if (value && neighbors < 2) {
+                    nextM.removeRC(r, c);
                 }
-                else if (m.getCell(r, c) && neighbors < 4) {
-                    nextM.setCell(r, c, true);
+                else if (value && neighbors < 4) {
+                    nextM.add(r, c);
                 }
-                else if (m.getCell(r, c) && neighbors > 3) {
-                    nextM.setCell(r, c, false);
+                else if (value && neighbors > 3) {
+                    nextM.removeRC(r, c);
                 }
-                else if (!m.getCell(r, c) && neighbors == 3) {
-                    nextM.setCell(r, c, true);
+                else if (!value && neighbors == 3) {
+                    nextM.add(r, c);
                 }
                 else {
-                    nextM.setCell(r, c, false);
+                    nextM.removeRC(r, c);
                 }
             }
         }
+
 
 //        for (int i = 0; i < size; i++) {
 //
 //            int row = m.getRow(i);
 //            int column = m.getColumn(i);
+//
 //            int neighbors = m.calculateNeighbors(row, column);
 //            boolean exists = m.getCell(row, column);
 //
@@ -146,20 +150,27 @@ public class Game {
 //    }
 
     public static void setNextBoard(CompactMatrix m, CompactMatrix nextM) {
-        int size = m.getSize();
+        int size = nextM.getSize();
 //        for (int r = 0; r < size; r++) {
 //            for (int c = 0; c < size; c++) {
 //                boolean value = nextM.getCell(r, c);
-//                m.setCell(r, c, value);
+//                if (value) {
+//                    m.add(r, c);
+//                }
+//                else {
+//                    m.removeRC(r, c);
+//                }
 //            }
 //        }
 
+        m.clearAll();
+
         for (int i = 0; i < size; i++) {
-            int row = m.getRow(i);
-            int column = m.getColumn(i);
-            boolean value = nextM.getCell(row, column);
-            m.setCell(row, column, value, i);
+            int row = nextM.getRow(i);
+            int column = nextM.getColumn(i);
+            m.add(row, column);
         }
+
     }
 
 }

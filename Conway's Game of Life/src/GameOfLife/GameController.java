@@ -81,7 +81,13 @@ public class GameController implements Initializable {
         s.setRandom(4);
         matrix = new CompactMatrix(s);
         SparseMatrix nextS = new SparseMatrix(gridSize);
+//        nextS.setRandom(4);
         nextMatrix = new CompactMatrix(nextS);
+//        System.out.println(matrix);
+//        System.out.println(nextMatrix);
+//        System.out.println(matrix.getSize());
+
+
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
@@ -107,13 +113,15 @@ public class GameController implements Initializable {
         }
 
     public void getNextGen() {
+//        System.out.println(matrix.getSize());
+//        System.out.println(nextMatrix.getSize());
 
         Game.calculateNextGen(matrix, nextMatrix);
         Game.setNextBoard(matrix, nextMatrix);
-        rectPane.getChildren().clear();
-        System.out.println(matrix.getSize());
 
-        System.out.println(matrix.getSize());
+        rectPane.getChildren().clear();
+//        System.out.println(matrix.getSize());
+
 
 
     }

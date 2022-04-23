@@ -58,8 +58,11 @@ public class CompactMatrix {
 
     // WRITE ADD
     public void add(int row, int column) {
-        compactMatrix[0].add(row);
-        compactMatrix[1].add(column);
+        if (!getCell(row, column)) {
+            compactMatrix[0].add(row);
+            compactMatrix[1].add(column);
+        }
+
 
     }
 
@@ -71,6 +74,17 @@ public class CompactMatrix {
 //                break;
 //            }
 //        }
+    }
+
+
+    public void removeRC(int row, int column) {
+        for (int i = 0; i < compactMatrix[0].size(); i++) {
+            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
+                compactMatrix[0].remove(i);
+                compactMatrix[1].remove(i);
+                break;
+            }
+        }
     }
 
     public void toggleCell(int row, int column, int index) {
@@ -106,16 +120,25 @@ public class CompactMatrix {
         return compactMatrix[1].get(index);
     }
 
+    public void clearAll() {
+        compactMatrix[0].clear();
+        compactMatrix[1].clear();
+    }
+
 
 
     public String toString() {
-        for (int i = 0; i < compactMatrix.length; i++) {
-            String result = "";
-            for (int j = 0; j < compactMatrix[0].size(); j++) {
-                result += compactMatrix[i].get(j);
-            }
-            System.out.println(result);
+        int size = getSize();
+        int[][] coords = new int[size][2];
+        for (int i = 0; i < size; i++) {
+            coords[i][0] = getRow(i);
+            coords[i][1] = getColumn(i);
         }
-        return "";
+
+        String fin = "";
+        for(int[] c : coords) {
+            fin += c[0] + "," + c[1] + " ";
+        }
+        return fin;
     }
 }
