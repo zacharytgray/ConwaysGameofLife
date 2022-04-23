@@ -48,10 +48,6 @@ public class GameController implements Initializable {
 
     private Movement clock;
 
-//    private BoardState b;
-
-//    private BoardState nextBoard;
-
     private CompactMatrix matrix;
 
     private CompactMatrix nextMatrix;
@@ -74,18 +70,9 @@ public class GameController implements Initializable {
 
         gridSize = (int)gridSizeControl.getValue();
 
-//        b = new BoardState(gridSize, gridSize);
-//        nextBoard = new BoardState(gridSize, gridSize);
+        matrix = new CompactMatrix(gridSize, 4);
+        nextMatrix = new CompactMatrix(gridSize, 4);
 
-        SparseMatrix s = new SparseMatrix(gridSize);
-        s.setRandom(4);
-        matrix = new CompactMatrix(s);
-        SparseMatrix nextS = new SparseMatrix(gridSize);
-//        nextS.setRandom(4);
-        nextMatrix = new CompactMatrix(nextS);
-//        System.out.println(matrix);
-//        System.out.println(nextMatrix);
-//        System.out.println(matrix.getSize());
 
 
 
@@ -99,8 +86,6 @@ public class GameController implements Initializable {
             boardColors.getItems().add(c);
         }
 
-
-//        Game.initialize(b, gridSize);
         updateColors();
         refreshGrid();
 
@@ -113,44 +98,17 @@ public class GameController implements Initializable {
         }
 
     public void getNextGen() {
-//        System.out.println(matrix.getSize());
-//        System.out.println(nextMatrix.getSize());
 
         Game.calculateNextGen(matrix, nextMatrix);
         Game.setNextBoard(matrix, nextMatrix);
 
         rectPane.getChildren().clear();
-//        System.out.println(matrix.getSize());
-
-
 
     }
 
     public void refreshGrid() {
         updateColors();
         rectPane.getChildren().clear();
-//        for (int r = 0; r < gridSize; r++) {
-//            for (int c = 0; c < gridSize; c++) {
-//                boolean value = matrix.getCell(r, c);
-//                Rectangle rect = new Rectangle(cell_width, cell_width);
-//                if (value) {
-//                    rect.setFill(liveCellColor.getColor());
-//                    GridPane.setConstraints(rect, c, r);
-//                    grid.getChildren().add(rect);
-//                }
-//                else {
-//                    rect.setFill(deadCellColor.getColor());
-//                    GridPane.setConstraints(rect, c, r);
-//                    grid.getChildren().add(rect);
-//                }
-//                int finalR = r;
-//                int finalC = c;
-//                rect.setOnMouseClicked(event -> {
-//                    matrix.toggleCell(finalR, finalC);
-//                    refreshGrid();
-//                });
-//            }
-//        }
 
         for (int i = 0; i < matrix.getSize(); i++) {
 
@@ -161,8 +119,6 @@ public class GameController implements Initializable {
             rect.setFill(liveCellColor.getColor());
 
             rect.setStroke(Color.BLACK);
-
-//            rectPane.setConstraints(rect, c, r);
 
             rectPane.getChildren().add(rect);
 
@@ -202,16 +158,10 @@ public class GameController implements Initializable {
         gridSize = (int)gridSizeControl.getValue();
 
         rectPane.getChildren().clear();
-//        b = new BoardState(gridSize, gridSize);
-//        nextBoard = new BoardState(gridSize, gridSize);
 
-        SparseMatrix s = new SparseMatrix(gridSize);
-        s.setRandom(4);
-        matrix = new CompactMatrix(s);
-        SparseMatrix nextS = new SparseMatrix(gridSize);
-        nextMatrix = new CompactMatrix(nextS);
+        matrix = new CompactMatrix(gridSize, 4);
+        nextMatrix = new CompactMatrix(gridSize, 4);
 
-//        Game.initialize(b, gridSize);
         cell_width = rectPane.getPrefWidth() / gridSize;
 
         refreshGrid();

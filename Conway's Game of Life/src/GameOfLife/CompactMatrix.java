@@ -4,27 +4,28 @@ import java.util.ArrayList;
 
 public class CompactMatrix {
 
-//    int[][] compactMatrix; // 0 is row, 1 is column
     ArrayList<Integer>[] compactMatrix;
     int gridSize;
+    int cell_frequency;
+    InsertionSort ob;
 
-    public CompactMatrix(SparseMatrix s) {
+    public CompactMatrix(int gridSize, int cell_frequency) {
+        this.gridSize = gridSize;
+        this.cell_frequency = cell_frequency;
         compactMatrix = new ArrayList[2];
         compactMatrix[0] = new ArrayList<Integer>();
         compactMatrix[1] = new ArrayList<Integer>();
+        ob = new InsertionSort();
+        setRandom();
 
-//        compactMatrix = new int[2][size]; // you want a coordinate for each live cell, so we allocate those spots
-        gridSize = s.getGridSize();
+    }
 
-
+    public void setRandom() {
         for (int r = 0; r < gridSize; r++) {
             for (int c = 0; c < gridSize; c++) {
-
-                if (s.getCell(r, c)) {
-
-                    compactMatrix[0].add(r);
-                    compactMatrix[1].add(c);
-
+                int rand = (int) (Math.random() * cell_frequency);
+                if (rand == 0) {
+                    add(r, c);
                 }
             }
         }
@@ -48,32 +49,25 @@ public class CompactMatrix {
                         !(r == row && c == column) && // making sure we don't count the cell we're looking at
                         getCell(r, c)) { // making sure neighbor we're looking at exists and is alive
                     count++;
-//                    System.out.println(r + " " + c  + "\n");
                 }
             }
         }
         return count;
     }
 
-
-    // WRITE ADD
     public void add(int row, int column) {
         if (!getCell(row, column)) {
             compactMatrix[0].add(row);
             compactMatrix[1].add(column);
-        }
 
+            ob.sort(compactMatrix[0],compactMatrix[1]);
+        }
 
     }
 
     public void remove(int index) {
-//        for (int i = 0; i < compactMatrix[0].size(); i++) {
-//            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
-                compactMatrix[0].remove(index);
-                compactMatrix[1].remove(index);
-//                break;
-//            }
-//        }
+            compactMatrix[0].remove(index);
+            compactMatrix[1].remove(index);
     }
 
 
@@ -93,18 +87,6 @@ public class CompactMatrix {
         }
         else {
             add(row, column);
-        }
-    }
-
-    public void setCell(int row, int column, boolean alive, int index) {
-        if (alive && !getCell(row, column)) {
-            add(row, column);
-        }
-        else if (!alive && getCell(row, column)) {
-            remove(index);
-        }
-        else {
-            System.out.println("Invalid conditions in setCell()");
         }
     }
 
