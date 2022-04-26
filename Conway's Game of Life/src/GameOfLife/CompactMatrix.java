@@ -1,10 +1,15 @@
 package GameOfLife;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class CompactMatrix {
 
     ArrayList<Integer>[] compactMatrix;
+
+    HashSet<Tuple> map;
+
     int gridSize;
     int cell_frequency;
     InsertionSort ob;
@@ -12,11 +17,17 @@ public class CompactMatrix {
     public CompactMatrix(int gridSize, int cell_frequency) {
         this.gridSize = gridSize;
         this.cell_frequency = cell_frequency;
-        compactMatrix = new ArrayList[2];
-        compactMatrix[0] = new ArrayList<Integer>();
-        compactMatrix[1] = new ArrayList<Integer>();
-        ob = new InsertionSort();
-        setRandom();
+
+//        compactMatrix = new ArrayList[2];
+//        compactMatrix[0] = new ArrayList<Integer>();
+//        compactMatrix[1] = new ArrayList<Integer>();
+
+        map = new HashSet<>();
+
+
+
+//        ob = new InsertionSort();
+//        setRandom();
 
     }
 
@@ -32,13 +43,17 @@ public class CompactMatrix {
     }
 
     public boolean getCell(int row, int column) {
-        for (int i = 0; i < compactMatrix[0].size(); i++) {
-            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
-                return true;
-            }
-        }
-        return false;
+//        for (int i = 0; i < compactMatrix[0].size(); i++) {
+//            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
+//                return true;
+//            }
+//        }
+//        return false;
+
+        return map.contains(new Tuple(row, column));
+
     }
+
 
     public int calculateNeighbors(int row, int column) {
         int count = 0;
@@ -56,13 +71,7 @@ public class CompactMatrix {
     }
 
     public void add(int row, int column) {
-        if (!getCell(row, column)) {
-            compactMatrix[0].add(row);
-            compactMatrix[1].add(column);
-
-            ob.sort(compactMatrix[0],compactMatrix[1]);
-        }
-
+        map.add(new Tuple(row, column));
     }
 
     public void remove(int index) {
@@ -72,18 +81,21 @@ public class CompactMatrix {
 
 
     public void removeRC(int row, int column) {
-        for (int i = 0; i < compactMatrix[0].size(); i++) {
-            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
-                compactMatrix[0].remove(i);
-                compactMatrix[1].remove(i);
-                break;
-            }
-        }
+//        for (int i = 0; i < compactMatrix[0].size(); i++) {
+//            if (compactMatrix[0].get(i) == row && compactMatrix[1].get(i) == column) {
+//                compactMatrix[0].remove(i);
+//                compactMatrix[1].remove(i);
+//                break;
+//            }
+//        }
+
+        map.remove(new Tuple(row, column));
+
     }
 
-    public void toggleCell(int row, int column, int index) {
-        if (getCell(row, column)) {
-            remove(index);
+    public void toggleCell(int row, int column, boolean alive) {
+        if (alive) {
+            removeRC(row, column);
         }
         else {
             add(row, column);
@@ -91,36 +103,67 @@ public class CompactMatrix {
     }
 
     public int getSize() {
-        return compactMatrix[0].size();
+//        return compactMatrix[0].size();
+        return map.size();
     }
 
-    public int getRow(int index) {
-        return compactMatrix[0].get(index);
-    }
-
-    public int getColumn(int index) {
-        return compactMatrix[1].get(index);
-    }
+//    public int getRow(int index) {
+////        return compactMatrix[0].get(index);
+//
+//    }
+//
+//    public int getColumn(int index) {
+//        return compactMatrix[1].get(index);
+//    }
 
     public void clearAll() {
-        compactMatrix[0].clear();
-        compactMatrix[1].clear();
+//        compactMatrix[0].clear();
+//        compactMatrix[1].clear();
+
+        map.clear();
     }
 
+    public CompactMatrix calculateNextGen() {
+        int size = gridSize;
+        CompactMatrix nextM = new CompactMatrix(gridSize, cell_frequency);
 
 
-    public String toString() {
-        int size = getSize();
-        int[][] coords = new int[size][2];
-        for (int i = 0; i < size; i++) {
-            coords[i][0] = getRow(i);
-            coords[i][1] = getColumn(i);
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+
+                boolean value = getCell(r, c);
+                int neighbors = calculateNeighbors(r, c);
+//                System.out.println(neighbors);
+
+                if (value && (neighbors == 2 || neighbors == 3)) {
+                    nextM.add(r, c);
+                }
+                else if (!value && neighbors == 3) {
+                    nextM.add(r, c);
+                }
+            }
         }
 
-        String fin = "";
-        for(int[] c : coords) {
-            fin += c[0] + "," + c[1] + " ";
-        }
-        return fin;
+        return nextM;
+
     }
+
+    public List<Tuple> toArray() {
+        return map.stream().toList();
+    }
+
+//    public String toString() {
+//        int size = getSize();
+//        int[][] coords = new int[size][2];
+//        for (int i = 0; i < size; i++) {
+//            coords[i][0] = getRow(i);
+//            coords[i][1] = getColumn(i);
+//        }
+//
+//        String fin = "";
+//        for(int[] c : coords) {
+//            fin += c[0] + "," + c[1] + " ";
+//        }
+//        return fin;
+//    }
 }

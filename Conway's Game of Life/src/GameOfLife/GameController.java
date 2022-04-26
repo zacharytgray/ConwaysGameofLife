@@ -71,8 +71,9 @@ public class GameController implements Initializable {
         gridSize = (int)gridSizeControl.getValue();
 
         matrix = new CompactMatrix(gridSize, 4);
-        nextMatrix = new CompactMatrix(gridSize, 4);
+//        nextMatrix = new CompactMatrix(gridSize, 4);
 
+        matrix.setRandom();
 
 
 
@@ -99,8 +100,11 @@ public class GameController implements Initializable {
 
     public void getNextGen() {
 
-        Game.calculateNextGen(matrix, nextMatrix);
-        Game.setNextBoard(matrix, nextMatrix);
+//        Game.calculateNextGen(matrix, nextMatrix);
+//        Game.setNextBoard(matrix, nextMatrix);
+
+        matrix = matrix.calculateNextGen();
+
 
         rectPane.getChildren().clear();
 
@@ -110,25 +114,37 @@ public class GameController implements Initializable {
         updateColors();
         rectPane.getChildren().clear();
 
-        for (int i = 0; i < matrix.getSize(); i++) {
 
-            int r = matrix.getRow(i);
-            int c = matrix.getColumn(i);
+
+        for (Tuple t : matrix.toArray()) {
+
+//            int r = matrix.getRow(i);
+//            int c = matrix.getColumn(i);
+
+            int r = t.getX();
+            int c = t.getY();
 
             Rectangle rect = new Rectangle(c * cell_width, r * cell_width, cell_width, cell_width);
             rect.setFill(liveCellColor.getColor());
 
-            rect.setStroke(Color.BLACK);
+//            rect.setStroke(Color.BLACK);
 
             rectPane.getChildren().add(rect);
 
-            int finalI = i;
-            rect.setOnMouseClicked(event -> {
-                matrix.toggleCell(r, c, finalI);
-                refreshGrid();
-            });
+            checkClick(r, c, rect);
+
         }
     }
+
+    public void checkClick(int r, int c, Rectangle rect) {
+        rect.setOnMouseClicked(event -> {
+            boolean alive = rect.getFill().equals(liveCellColor.getColor());
+
+            matrix.toggleCell(r, c, alive);
+            refreshGrid();
+        });
+    }
+
 
     public void pause() {
         clock.stop();
@@ -160,7 +176,8 @@ public class GameController implements Initializable {
         rectPane.getChildren().clear();
 
         matrix = new CompactMatrix(gridSize, 4);
-        nextMatrix = new CompactMatrix(gridSize, 4);
+        matrix.setRandom();
+//        nextMatrix = new CompactMatrix(gridSize, 4);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
@@ -190,12 +207,11 @@ public class GameController implements Initializable {
             String strSize = Integer.toString(gridSize);
             sizeLabel.setText(strSize + "x" + strSize);
 
-            refreshGrid();
-
             fps = (long)speed.getValue();
             interval = 1000000000L / fps;
             if (now - last > interval) {
                 updateBoard();
+//                clock.stop();
                 last = now;
             }
         }
