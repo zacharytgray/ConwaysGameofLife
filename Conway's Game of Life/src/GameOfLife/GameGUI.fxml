@@ -11,7 +11,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOfLife.GameController">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOfLife.GameController">
+   <center>
+      <Pane fx:id="rectPane" prefHeight="800.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
+   </center>
    <left>
       <VBox alignment="TOP_CENTER" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
@@ -158,7 +161,4 @@
          </children>
       </VBox>
    </left>
-   <center>
-      <Pane fx:id="rectPane" prefHeight="600.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
-   </center>
 </BorderPane>

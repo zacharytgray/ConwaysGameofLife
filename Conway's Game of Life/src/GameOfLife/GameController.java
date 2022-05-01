@@ -7,9 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -71,7 +71,6 @@ public class GameController implements Initializable {
         gridSize = (int)gridSizeControl.getValue();
 
         matrix = new CompactMatrix(gridSize, 4);
-//        nextMatrix = new CompactMatrix(gridSize, 4);
 
         matrix.setRandom();
 
@@ -100,9 +99,6 @@ public class GameController implements Initializable {
 
     public void getNextGen() {
 
-//        Game.calculateNextGen(matrix, nextMatrix);
-//        Game.setNextBoard(matrix, nextMatrix);
-
         matrix = matrix.calculateNextGen();
 
 
@@ -116,10 +112,7 @@ public class GameController implements Initializable {
 
 
 
-        for (Tuple t : matrix.toArray()) {
-
-//            int r = matrix.getRow(i);
-//            int c = matrix.getColumn(i);
+        for (Tuple t : matrix.toList()) {
 
             int r = t.getX();
             int c = t.getY();
@@ -127,24 +120,37 @@ public class GameController implements Initializable {
             Rectangle rect = new Rectangle(c * cell_width, r * cell_width, cell_width, cell_width);
             rect.setFill(liveCellColor.getColor());
 
-//            rect.setStroke(Color.BLACK);
-
             rectPane.getChildren().add(rect);
 
-            checkClick(r, c, rect);
+            rectPane.setOnMouseClicked(event -> {
+                double x = event.getSceneX();
+                double y = event.getSceneY();
+
+                int new_x = snapCoordinate(x - 300);
+                int new_y = snapCoordinate(y);
+
+                if (matrix.getCell(new_y, new_x)) {
+                    matrix.remove(new_y, new_x);
+                }
+                else {
+                    matrix.add(new_y, new_x);
+                }
+
+                refreshGrid();
+            });
 
         }
     }
 
-    public void checkClick(int r, int c, Rectangle rect) {
-        rect.setOnMouseClicked(event -> {
-            boolean alive = rect.getFill().equals(liveCellColor.getColor());
-
-            matrix.toggleCell(r, c, alive);
-            refreshGrid();
-        });
+    public int snapCoordinate(double coordinate) {
+        for (double i = 0.0; i <= gridSize * cell_width + cell_width; i+= cell_width) {
+            if (i > coordinate) {
+                double coord = i - cell_width;
+                return (int)Math.round(coord / cell_width);
+            }
+        }
+        return 0;
     }
-
 
     public void pause() {
         clock.stop();
@@ -177,7 +183,6 @@ public class GameController implements Initializable {
 
         matrix = new CompactMatrix(gridSize, 4);
         matrix.setRandom();
-//        nextMatrix = new CompactMatrix(gridSize, 4);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
@@ -211,7 +216,6 @@ public class GameController implements Initializable {
             interval = 1000000000L / fps;
             if (now - last > interval) {
                 updateBoard();
-//                clock.stop();
                 last = now;
             }
         }
