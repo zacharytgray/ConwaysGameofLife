@@ -2,8 +2,8 @@ package GameOfLife;
 
 public class Tuple {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Tuple(int x, int y) {
         this.x = x;
@@ -21,9 +21,7 @@ public class Tuple {
     public boolean equals(Object O)  {
         if (O instanceof Tuple) {
             Tuple other = (Tuple)O;
-            if (x == other.getX() && y == other.getY()) {
-                return true;
-            }
+            return x == other.getX() && y == other.getY();
         }
         return false;
     }

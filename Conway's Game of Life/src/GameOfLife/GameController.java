@@ -67,13 +67,13 @@ public class GameController implements Initializable {
 
     private Template activeTemplate;
 
+    private final int cell_frequency = 4; // 1 in x cells are set to alive during initialization of new random board
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         clock = new Movement();
-
-
 
         gridSize = (int)gridSizeControl.getValue();
 
@@ -81,7 +81,7 @@ public class GameController implements Initializable {
         templates.getSelectionModel().select(Template.RANDOM);
         activeTemplate = templates.getValue();
 
-        matrix = new CompactMatrix(gridSize, 4, activeTemplate);
+        matrix = new CompactMatrix(gridSize, cell_frequency, activeTemplate);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
@@ -95,6 +95,15 @@ public class GameController implements Initializable {
 
         updateColors();
         refreshGrid();
+
+        String strSize = Integer.toString(gridSize);
+        sizeLabel.setText(strSize + "x" + strSize);
+
+        int intSpeed = (int)speed.getValue();
+        fpsLabel.setText(Integer.toString(intSpeed));
+
+        generations = 0;
+        generationsLabel.setText(Integer.toString(generations));
 
     }
 
@@ -126,12 +135,9 @@ public class GameController implements Initializable {
             rect.setFill(liveCellColor.getColor());
             rectPane.getChildren().add(rect);
 
-            rect.setArcWidth(8);
-            rect.setArcHeight(8);
-
-//            Circle circ = new Circle(c * cell_width + (cell_width / 2), r * cell_width + (cell_width / 2), cell_width / 2);
-//            circ.setFill(liveCellColor.getColor());
-//            rectPane.getChildren().add(circ);
+            double ratio = (double) 4 / 27;
+            rect.setArcWidth(cell_width * ratio);
+            rect.setArcHeight(cell_width * ratio);
 
             rectPane.setOnMouseClicked(event -> {
                 double x = event.getSceneX();
@@ -173,7 +179,9 @@ public class GameController implements Initializable {
 
     @FXML
     public void oneGen() {
-        updateBoard();
+        if (!running) {
+            updateBoard();
+        }
     }
 
     @FXML
@@ -190,7 +198,7 @@ public class GameController implements Initializable {
     @FXML
     public void reset() {
         generations = 0;
-        generationsLabel.setText(Integer.toString(0));
+        generationsLabel.setText(Integer.toString(generations));
         updateColors();
         pause();
         running = false;
@@ -207,7 +215,7 @@ public class GameController implements Initializable {
 
         activeTemplate = templates.getValue();
 
-        matrix = new CompactMatrix(gridSize, 4, activeTemplate);
+        matrix = new CompactMatrix(gridSize, cell_frequency, activeTemplate);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 

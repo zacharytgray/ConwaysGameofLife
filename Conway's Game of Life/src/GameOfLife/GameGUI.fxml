@@ -82,7 +82,7 @@
                         <Font name="Arial" size="21.0" />
                      </font>
                   </Label>
-                  <Slider fx:id="speed" min="5.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="26.0">
+                  <Slider fx:id="speed" min="5.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="30.0">
                      <VBox.margin>
                         <Insets bottom="20.0" left="50.0" right="50.0" top="5.0" />
                      </VBox.margin>
