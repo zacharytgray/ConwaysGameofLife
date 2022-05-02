@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -29,6 +28,9 @@ public class GameController implements Initializable {
     private Button reset;
 
     @FXML
+    private Button plusOneGen;
+
+    @FXML
     private Slider speed;
 
     @FXML
@@ -45,6 +47,11 @@ public class GameController implements Initializable {
 
     @FXML
     private Label sizeLabel;
+
+    @FXML
+    private Label generationsLabel;
+
+    private int generations;
 
     private Movement clock;
 
@@ -66,9 +73,11 @@ public class GameController implements Initializable {
 
         clock = new Movement();
 
+
+
         gridSize = (int)gridSizeControl.getValue();
 
-        cellColors.getSelectionModel().select(Colors.GREEN);
+        cellColors.getSelectionModel().select(Colors.ORANGE);
         templates.getSelectionModel().select(Template.RANDOM);
         activeTemplate = templates.getValue();
 
@@ -93,10 +102,12 @@ public class GameController implements Initializable {
     public void updateBoard() {
             getNextGen();
             refreshGrid();
+
         }
 
     public void getNextGen() {
-
+        generations++;
+        generationsLabel.setText(Integer.toString(generations));
         matrix = matrix.calculateNextGen();
         rectPane.getChildren().clear();
 
@@ -113,8 +124,14 @@ public class GameController implements Initializable {
 
             Rectangle rect = new Rectangle(c * cell_width, r * cell_width, cell_width, cell_width);
             rect.setFill(liveCellColor.getColor());
-
             rectPane.getChildren().add(rect);
+
+            rect.setArcWidth(8);
+            rect.setArcHeight(8);
+
+//            Circle circ = new Circle(c * cell_width + (cell_width / 2), r * cell_width + (cell_width / 2), cell_width / 2);
+//            circ.setFill(liveCellColor.getColor());
+//            rectPane.getChildren().add(circ);
 
             rectPane.setOnMouseClicked(event -> {
                 double x = event.getSceneX();
@@ -139,8 +156,8 @@ public class GameController implements Initializable {
     public int snapCoordinate(double coordinate) {
         for (double i = 0.0; i <= gridSize * cell_width + cell_width; i+= cell_width) {
             if (i > coordinate) {
-                double coord = i - cell_width;
-                return (int)Math.round(coord / cell_width);
+                double c = i - cell_width;
+                return (int)Math.round(c / cell_width);
             }
         }
         return 0;
@@ -152,6 +169,11 @@ public class GameController implements Initializable {
 
     public void start() {
         clock.start();
+    }
+
+    @FXML
+    public void oneGen() {
+        updateBoard();
     }
 
     @FXML
@@ -167,11 +189,19 @@ public class GameController implements Initializable {
 
     @FXML
     public void reset() {
+        generations = 0;
+        generationsLabel.setText(Integer.toString(0));
         updateColors();
         pause();
         running = false;
 
         gridSize = (int)gridSizeControl.getValue();
+
+        String strSize = Integer.toString(gridSize);
+        sizeLabel.setText(strSize + "x" + strSize);
+
+        int intSpeed = (int)speed.getValue();
+        fpsLabel.setText(Integer.toString(intSpeed));
 
         rectPane.getChildren().clear();
 
@@ -201,7 +231,7 @@ public class GameController implements Initializable {
         public void handle(long now) {
 
             int intSpeed = (int)speed.getValue();
-            fpsLabel.setText(intSpeed + ",");
+            fpsLabel.setText(Integer.toString(intSpeed));
 
             String strSize = Integer.toString(gridSize);
             sizeLabel.setText(strSize + "x" + strSize);

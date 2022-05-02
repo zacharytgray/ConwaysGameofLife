@@ -26,15 +26,15 @@ public enum Colors {
             return "Orange";
         }
     },
-    YELLOW{
+    LIME{
         @Override
         public Color getColor() {
-            return Color.YELLOW;
+            return Color.GREENYELLOW;
         }
 
         @Override
         public String toString() {
-            return "Yellow";
+            return "Lime";
         }
     },
     GREEN{
@@ -90,17 +90,6 @@ public enum Colors {
         @Override
         public String toString() {
             return "Gray";
-        }
-    },
-    WHITE{
-        @Override
-        public Color getColor() {
-            return Color.WHITE;
-        }
-
-        @Override
-        public String toString() {
-            return "White";
         }
     };
 

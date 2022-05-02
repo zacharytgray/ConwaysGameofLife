@@ -14,12 +14,22 @@ public enum Template {
                 }
             }
         }
+
+        @Override
+        public String toString() {
+            return "Random";
+        }
     },
 
     EMPTY{
         @Override
         void setBoard(int gridSize, int cell_frequency, CompactMatrix m) {
 
+        }
+
+        @Override
+        public String toString() {
+            return "Blank";
         }
     },
 
@@ -31,6 +41,11 @@ public enum Template {
             m.add(3,1);
             m.add(3,2);
             m.add(3,3);
+        }
+
+        @Override
+        public String toString() {
+            return "Glider";
         }
     },
 
@@ -83,9 +98,15 @@ public enum Template {
 
 
         }
+
+        @Override
+        public String toString() {
+            return "Glider Gun";
+        }
     };
 
 
     abstract void setBoard(int gridSize, int cell_frequency, CompactMatrix m);
+    abstract public String toString();
 
 }
