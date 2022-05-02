@@ -38,7 +38,7 @@ public class GameController implements Initializable {
     private ChoiceBox<Colors> cellColors;
 
     @FXML
-    private ChoiceBox<Colors> boardColors;
+    private ChoiceBox<Template> templates;
 
     @FXML
     private Label fpsLabel;
@@ -50,17 +50,15 @@ public class GameController implements Initializable {
 
     private CompactMatrix matrix;
 
-    private CompactMatrix nextMatrix;
-
     private double cell_width;
 
     private boolean running = false;
 
     private int gridSize;
 
-    private Colors deadCellColor;
-
     private Colors liveCellColor;
+
+    private Template activeTemplate;
 
 
     @Override
@@ -70,20 +68,20 @@ public class GameController implements Initializable {
 
         gridSize = (int)gridSizeControl.getValue();
 
-        matrix = new CompactMatrix(gridSize, 4);
+        cellColors.getSelectionModel().select(Colors.GREEN);
+        templates.getSelectionModel().select(Template.RANDOM);
+        activeTemplate = templates.getValue();
 
-        matrix.setRandom();
-
-
+        matrix = new CompactMatrix(gridSize, 4, activeTemplate);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
-        boardColors.getSelectionModel().select(Colors.WHITE);
-        cellColors.getSelectionModel().select(Colors.GREEN);
-
         for (Colors c: Colors.values()){
             cellColors.getItems().add(c);
-            boardColors.getItems().add(c);
+        }
+
+        for (Template t: Template.values()) {
+            templates.getItems().add(t);
         }
 
         updateColors();
@@ -100,8 +98,6 @@ public class GameController implements Initializable {
     public void getNextGen() {
 
         matrix = matrix.calculateNextGen();
-
-
         rectPane.getChildren().clear();
 
     }
@@ -109,8 +105,6 @@ public class GameController implements Initializable {
     public void refreshGrid() {
         updateColors();
         rectPane.getChildren().clear();
-
-
 
         for (Tuple t : matrix.toList()) {
 
@@ -181,8 +175,9 @@ public class GameController implements Initializable {
 
         rectPane.getChildren().clear();
 
-        matrix = new CompactMatrix(gridSize, 4);
-        matrix.setRandom();
+        activeTemplate = templates.getValue();
+
+        matrix = new CompactMatrix(gridSize, 4, activeTemplate);
 
         cell_width = rectPane.getPrefWidth() / gridSize;
 
@@ -192,7 +187,6 @@ public class GameController implements Initializable {
 
     @FXML
     public void updateColors() {
-        deadCellColor = boardColors.getValue();
         liveCellColor = cellColors.getValue();
     }
 
@@ -207,7 +201,7 @@ public class GameController implements Initializable {
         public void handle(long now) {
 
             int intSpeed = (int)speed.getValue();
-            fpsLabel.setText(Integer.toString(intSpeed) + ",");
+            fpsLabel.setText(intSpeed + ",");
 
             String strSize = Integer.toString(gridSize);
             sizeLabel.setText(strSize + "x" + strSize);

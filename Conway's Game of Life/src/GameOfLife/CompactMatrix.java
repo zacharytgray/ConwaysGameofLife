@@ -3,30 +3,22 @@ package GameOfLife;
 import java.util.HashSet;
 import java.util.List;
 
-public class CompactMatrix {
+public class CompactMatrix{
 
     HashSet<Tuple> map;
 
     int gridSize;
     int cell_frequency;
+    Template t;
 
-    public CompactMatrix(int gridSize, int cell_frequency) {
+    public CompactMatrix(int gridSize, int cell_frequency, Template template) {
         this.gridSize = gridSize;
         this.cell_frequency = cell_frequency;
 
         map = new HashSet<>();
+        t = template;
+        t.setBoard(gridSize, cell_frequency, this);
 
-    }
-
-    public void setRandom() {
-        for (int r = 0; r < gridSize; r++) {
-            for (int c = 0; c < gridSize; c++) {
-                int rand = (int) (Math.random() * cell_frequency);
-                if (rand == 0) {
-                    add(r, c);
-                }
-            }
-        }
     }
 
     public boolean getCell(int row, int column) {
@@ -62,19 +54,9 @@ public class CompactMatrix {
 
     }
 
-    public void toggleCell(int row, int column, boolean alive) {
-        if (alive) {
-            remove(row, column);
-        }
-        else {
-            add(row, column);
-        }
-    }
-
     public CompactMatrix calculateNextGen() {
         int size = gridSize;
-        CompactMatrix nextM = new CompactMatrix(gridSize, cell_frequency);
-
+        CompactMatrix nextM = new CompactMatrix(gridSize, cell_frequency, Template.EMPTY);
 
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {

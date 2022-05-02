@@ -1,5 +1,6 @@
 package GameOfLife;
 
+import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 
 public enum Colors {
@@ -17,7 +18,7 @@ public enum Colors {
     ORANGE{
         @Override
         public Color getColor() {
-            return Color.ORANGE;
+            return Color.DARKORANGE;
         }
 
         @Override

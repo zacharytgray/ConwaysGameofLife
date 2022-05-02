@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BubbleChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -61,86 +63,94 @@
                      </HBox.margin>
                   </Label>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Label text="Template:">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font name="Arial" size="21.0" />
-                     </font>
-                  </Label>
-                  <ChoiceBox prefWidth="150.0">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </ChoiceBox>
-               </children>
                <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="20.0" top="20.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                      <children>
-                        <Label text="Cell Color:">
+                        <Label text="Template:">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="templates" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </ChoiceBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="15.0" top="15.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Cell Color: ">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
                         </Label>
                         <ChoiceBox fx:id="cellColors" prefWidth="150.0" />
                      </children>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="20.0" top="5.0" />
-                     </HBox.margin>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="BG Color:">
-                           <font>
-                              <Font name="Arial" size="21.0" />
-                           </font>
-                        </Label>
-                        <ChoiceBox fx:id="boardColors" prefWidth="150.0" />
-                     </children>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="20.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </VBox>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="15.0" top="15.0" />
+                     </padding>
+                  </HBox>
                </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <Label text="Simulation Speed (FPS):">
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Arial" size="21.0" />
-               </font>
-            </Label>
-            <Slider fx:id="speed" min="1.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="26.0">
-               <VBox.margin>
-                  <Insets bottom="20.0" left="50.0" right="50.0" top="5.0" />
-               </VBox.margin>
-            </Slider>
-            <Label text="Grid Size:">
-               <font>
-                  <Font name="Arial" size="21.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-            </Label>
-            <Slider fx:id="gridSizeControl" max="500.0" min="4.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="29.0">
-               <VBox.margin>
-                  <Insets bottom="20.0" left="50.0" right="50.0" top="5.0" />
-               </VBox.margin>
-            </Slider>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="350.0" prefWidth="100.0">
+               <children>
+                  <Label text="Simulation Speed (FPS):">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial" size="21.0" />
+                     </font>
+                  </Label>
+                  <Slider fx:id="speed" min="1.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="26.0">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="50.0" top="5.0" />
+                     </VBox.margin>
+                  </Slider>
+                  <Label text="Grid Size:">
+                     <font>
+                        <Font name="Arial" size="21.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Slider fx:id="gridSizeControl" max="500.0" min="4.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="29.0">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="50.0" top="5.0" />
+                     </VBox.margin>
+                  </Slider>
+                  <BubbleChart>
+                    <xAxis>
+                      <NumberAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BubbleChart>
+               </children>
+            </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Button fx:id="startStop" mnemonicParsing="false" onAction="#toggleRunning" text="Play/Pause">
